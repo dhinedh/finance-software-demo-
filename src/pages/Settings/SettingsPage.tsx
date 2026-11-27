@@ -65,6 +65,7 @@ export const SettingsPage: React.FC = () => {
       confirmText: 'Seed Demo Data',
       onConfirm: async () => {
         try {
+          localStorage.removeItem('retailfinance_has_purged');
           const res = await seedService.seedDemoData();
           showToast({
             type: 'success',
@@ -86,6 +87,7 @@ export const SettingsPage: React.FC = () => {
       isDanger: true,
       onConfirm: async () => {
         try {
+          localStorage.setItem('retailfinance_has_purged', 'true');
           await seedService.purgeDemoData();
           showToast({
             type: 'info',
@@ -196,6 +198,14 @@ export const SettingsPage: React.FC = () => {
         </p>
 
         <div className="flex flex-wrap items-center gap-3">
+          <button
+            onClick={handleSeedDemoData}
+            className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg bg-sky-600 hover:bg-sky-500 text-white shadow-xs"
+          >
+            <Database className="w-3.5 h-3.5" />
+            <span>Load Demo Dataset (20 Retailers + Bills)</span>
+          </button>
+
           <button
             onClick={handlePurgeAllData}
             className="inline-flex items-center space-x-1.5 px-3.5 py-2 text-xs font-semibold rounded-lg border border-rose-300 dark:border-rose-800 bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100"

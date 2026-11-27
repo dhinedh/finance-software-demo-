@@ -223,6 +223,49 @@ export const seedService = {
       }
     }
 
+    // 3. Add sample daily expenses
+    const todayStr = format(now, 'yyyy-MM-dd');
+    await db.expenses.clear();
+    await db.expenses.bulkAdd([
+      {
+        voucherNumber: `EXP-${todayStr.replace(/-/g, '')}-001`,
+        date: todayStr,
+        category: 'FUEL_TRANSPORT',
+        amount: 150000,
+        paymentMethod: 'CASH',
+        paidTo: 'HP Fuel Station - Bazaar Beat',
+        vehicleNumber: 'TN-22-AX-1234',
+        remarks: '15L diesel for morning delivery van',
+        isVoided: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        voucherNumber: `EXP-${todayStr.replace(/-/g, '')}-002`,
+        date: todayStr,
+        category: 'STAFF_ALLOWANCE',
+        amount: 80000,
+        paymentMethod: 'CASH',
+        paidTo: 'Driver Ravi & Salesman DA',
+        remarks: 'Daily food & route allowance',
+        isVoided: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      {
+        voucherNumber: `EXP-${todayStr.replace(/-/g, '')}-003`,
+        date: todayStr,
+        category: 'OFFICE_TEA',
+        amount: 24000,
+        paymentMethod: 'CASH',
+        paidTo: 'Sri Krishna Tea Stall',
+        remarks: 'Refreshments for godown loaders',
+        isVoided: false,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+    ]);
+
     await auditService.log({
       entityType: 'SETTINGS',
       entityId: 0,
@@ -241,13 +284,14 @@ export const seedService = {
   async purgeDemoData(): Promise<void> {
     await db.transaction(
       'rw',
-      [db.retailers, db.sales, db.collections, db.collectionAllocations, db.dailyBalances, db.auditLogs],
+      [db.retailers, db.sales, db.collections, db.collectionAllocations, db.dailyBalances, db.auditLogs, db.expenses],
       async () => {
         await db.collectionAllocations.clear();
         await db.collections.clear();
         await db.sales.clear();
         await db.retailers.clear();
         await db.dailyBalances.clear();
+        await db.expenses.clear();
       }
     );
 

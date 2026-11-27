@@ -248,6 +248,39 @@ export const DashboardPage: React.FC = () => {
         </div>
       )}
 
+      {/* Empty Database Quick-Start Banner */}
+      {totalRetailers === 0 && (
+        <div className="p-4 bg-gradient-to-r from-navy-900 via-navy-800 to-navy-950 text-white rounded-xl shadow-md border border-navy-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center space-x-2">
+              <Sparkles className="w-4 h-4 text-sky-400" />
+              <h3 className="text-sm font-bold tracking-wide">
+                Database is Currently Empty (0 Retailers, 0 Bills)
+              </h3>
+            </div>
+            <p className="text-xs text-slate-300">
+              This client-side ERP runs 100% offline in your browser. Click <strong className="text-sky-300">"Load Sample Data"</strong> to instantly populate 20 retailers across 5 beats, sales bills, collections, and explore all charts and reports.
+            </p>
+          </div>
+          <div className="flex items-center space-x-2 flex-shrink-0">
+            <button
+              onClick={() => setCurrentTab('sales')}
+              className="px-3.5 py-2 text-xs font-semibold rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 transition"
+            >
+              + Record Sale
+            </button>
+            <button
+              onClick={handleQuickSeedDemo}
+              disabled={isSeeding}
+              className="px-4 py-2 text-xs font-bold rounded-lg bg-sky-500 hover:bg-sky-400 text-navy-950 shadow-sm transition flex items-center space-x-1.5 cursor-pointer"
+            >
+              <Database className="w-3.5 h-3.5" />
+              <span>{isSeeding ? 'Loading Data...' : '⚡ Load Sample Data'}</span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* 4 Clean Primary Financial KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* 1. Today's Sales */}
@@ -352,6 +385,16 @@ export const DashboardPage: React.FC = () => {
         </div>
 
         <div className="flex items-center space-x-2">
+          {totalRetailers === 0 && (
+            <button
+              onClick={handleQuickSeedDemo}
+              disabled={isSeeding}
+              className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 text-white font-semibold transition text-xs shadow-xs"
+            >
+              <Database className="w-3.5 h-3.5" />
+              <span>⚡ Load Sample Data</span>
+            </button>
+          )}
           <button
             onClick={() => setCurrentTab('sales')}
             className="inline-flex items-center space-x-1 px-3 py-1.5 rounded-lg bg-navy-800 hover:bg-navy-700 text-white font-semibold transition"

@@ -103,6 +103,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const init = async () => {
       await seedService.ensureBaseConfig();
 
+      // Auto-populate demo dataset on initial application start if empty
+      const retailerCount = await db.retailers.count();
+      const hasPurged = localStorage.getItem('retailfinance_has_purged') === 'true';
+      if (retailerCount === 0 && !hasPurged) {
+        await seedService.seedDemoData();
+        setReloadTrigger((prev) => prev + 1);
+      }
+
       const settings = await db.settings.toCollection().first();
       if (settings) {
         if (settings.operatorName) setOperatorName(settings.operatorName);
